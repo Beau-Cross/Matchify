@@ -1,5 +1,8 @@
+#from firebase import firebase
+import pyrebase
 from flask import Flask, render_template, request, session, jsonify, json
-from flask_mysqldb import MySQL
+#from .forms import FirePut
+#from flask_mysqldb import MySQL
 from os.path import abspath
 import ConfigParser
 
@@ -7,13 +10,29 @@ app = Flask(__name__)
 
 cfg = ConfigParser.ConfigParser()
 cfg.read('/home/beauho/Programming/flaskappConfig/config.ini')
+#cfg.read('/home/beauho/Programming/flaskappConfig/config.ini')
 
-app.config['MYSQL_HOST'] = cfg.get('mysqlAccount', 'host')
-app.config['MYSQL_USER'] = cfg.get('mysqlAccount', 'username')
-app.config['MYSQL_PASSWORD'] = cfg.get('mysqlAccount', 'password')
-app.config['MYSQL_DB'] = cfg.get('mysqlAccount', 'database')
+config = {
+  "apiKey": cfg.get('info','FIREBASE_API_KEY'),
+  "authDomain": "matchify-7b750.firebaseapp.com",
+  "databaseURL": "https://matchify-7b750.firebaseio.com",
+  "projectId": "matchify-7b750",
+  "storageBucket": "matchify-7b750.appspot.com",
+  "serviceAccount": "/home/beauho/Programming/flaskapp/firebase-private-key.json",
+  "messagingSenderId": "367663586987"
+}
 
-mysql = MySQL(app)
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
+
+#app.config['MYSQL_HOST'] = cfg.get('mysqlAccount', 'host')
+#app.config['MYSQL_USER'] = cfg.get('mysqlAccount', 'username')
+#app.config['MYSQL_PASSWORD'] = cfg.get('mysqlAccount', 'password')
+#app.config['MYSQL_DB'] = cfg.get('mysqlAccount', 'database')
+
+#mysql = MySQL(app)
+
+#authentication = firebase.FirebaseAuthentication('arAavmJgKDcBQftCpIuctrJMnVm3S0Azb0c21voB')
 
 @app.route("/")
 def home():
@@ -22,6 +41,14 @@ def home():
 @app.route("/home")
 def template():
 	return render_template("home.html")
+
+@app.route("/firebaseTest")
+def fbTest():
+	new_event = {"Test": "Value"}
+	jsonData = json.dumps(new_event)
+	db.child("events").push(jsonData)
+	#result = firebase.get('/Users', None)
+	return str(new_event)
 
 #This page is how to pass key/value pairs to the server side
 @app.route("/validate")
