@@ -1,39 +1,44 @@
-#from firebase import firebase
-import pyrebase
-from flask import Flask, render_template, request, session, jsonify, json
-#from .forms import FirePut
-#from flask_mysqldb import MySQL
+from flask import Flask, redirect, g, render_template, request, session, jsonify, json
+from spotify_requests import spotify
 from os.path import abspath
 import ConfigParser
 
+
+
+
 app = Flask(__name__)
+app.secret_key = 'key key its a key of keys'
 
 cfg = ConfigParser.ConfigParser()
-cfg.read('/home/beauho/Programming/flaskappConfig/config.ini')
-#cfg.read('/home/beauho/Programming/flaskappConfig/config.ini')
+cfg.read("/home/vm_user/Desktop/Matchify/config.ini")
 
 config = {
-  "apiKey": cfg.get('info','FIREBASE_API_KEY'),
-  "authDomain": "matchify-7b750.firebaseapp.com",
-  "databaseURL": "https://matchify-7b750.firebaseio.com",
-  "projectId": "matchify-7b750",
-  "storageBucket": "matchify-7b750.appspot.com",
-  "serviceAccount": "/home/beauho/Programming/flaskapp/firebase-private-key.json",
-  "messagingSenderId": "367663586987"
+	#To do add config and change service account directory to yours
 }
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
-#app.config['MYSQL_HOST'] = cfg.get('mysqlAccount', 'host')
-#app.config['MYSQL_USER'] = cfg.get('mysqlAccount', 'username')
-#app.config['MYSQL_PASSWORD'] = cfg.get('mysqlAccount', 'password')
-#app.config['MYSQL_DB'] = cfg.get('mysqlAccount', 'database')
 
-#mysql = MySQL(app)
+#Authorization API Calls
+@app.route("/auth")
+def auth():
+	return redirect(spotify.AUTH_URL)
 
-#authentication = firebase.FirebaseAuthentication('arAavmJgKDcBQftCpIuctrJMnVm3S0Azb0c21voB')
+@app.route("/callback")
+def callback():
+	auth_token = request.args['code']
+	auth_header = spotify.authorize(auth_token)
+	session['auth_header'] = auth_header
 
+	return profile()
+
+def valid_toek(resp):
+	return resp is not None and not 'error' in resp
+#----------------END Authorizaton
+
+
+#Home Page Calls
 @app.route("/")
 def home():
 	return render_template("home.html")
@@ -41,14 +46,14 @@ def home():
 @app.route("/home")
 def template():
 	return render_template("home.html")
+#----------------END Home Calls
 
-@app.route("/firebaseTest")
-def fbTest():
-	new_event = {"Test": "Value"}
-	jsonData = json.dumps(new_event)
-	db.child("events").push(jsonData)
-	#result = firebase.get('/Users', None)
-	return str(new_event)
+
+
+
+
+
+
 
 #This page is how to pass key/value pairs to the server side
 @app.route("/validate")
@@ -100,21 +105,6 @@ def dbController():
 	if ("proc" in qDict and qDict["proc"].isaplpha()):
 		proc = qDict["proc"]
 
-	#Make connection with mysql database
-	rv = ""
-	if (action != "null"):
-		cur = mysql.connection.cursor()
-		if (action == "select"):
-			cur.execute("Select * from "+table)
-			rv = cur.fetchall()
-		if (action == "proc"):
-			cur.execute("call "+proc+"();")
-			rv = cur.fetchall()
-		#Get header data, and convert result to json
-		row_headers=[x[0] for x in cur.description]
-		json_data=[]
-		for result in rv:
-			json_data.append(dict(zip(row_headers,result)))
 	#Export data
 	if (returnJSON == True):
 		return jsonify(json_data)
@@ -122,4 +112,4 @@ def dbController():
 		return null
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run(debug=True, port=spotify.PORT)
