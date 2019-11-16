@@ -2,25 +2,162 @@
 <head>
         <title>Matchify</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-	
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+		<style>
+			#loginButton{
+			width: 300px;
+			height: 60px;
+			padding: 0px;
+
+			}
+			#createButton{
+			width: 300px;
+			height: 60px;
+			padding: 0px;
+			}
+			#newUsername 
+			{
+			position:absolute;
+			min-width:35%;
+			height: 15%;
+			z-index:20;
+			background-color:rgb(216, 215, 215);
+			border: 1px solid grey;
+			}
+			#upass 
+			{
+			position:absolute;
+			min-width:35%;
+			height: 15%;
+			z-index:20;
+			background-color:white;
+			border: 1px solid grey;
+			
+			}
+			IMG.displayed {
+			display: block;
+			margin: auto;
+			
+			width: 50%;}
+			
+		</style>
 </head>
 <body>
+	
+		<div class = "mg-responsive center-block">
+				<img class ="displayed" src ="/static/images/matchifyWords.png">
+		</div>
 	<div class="container">
 		<div class="jumbotron text-center">
-			<h1>Matchify</h1>
-			<p><i>This is gonna be sick</i></p>
+			<p><i>Love at first sound</i></p>
 		</div>
 	</div>
+
+
+	
+
+
+
+
+	<center>
 	<div class="container">
-        	<form class="centered" action="login">
-                	<input class="btn btn-primary form-control" type="submit" value="Login">
-        	</form>
-        	<br>
-        	<form class="centered" action="createAccount">
-                	<input class="btn btn-primary form-control" type="submit" value="Create an account">
-        	</form>
+			<label for="uname"><b>Email:</b></label>
+			<input type="text" id = "uname" placeholder="Enter Email" name="uname" required>
 		
+		<br>
+		<div>
+			<button  id ="loginButton" type ="button" class ="btn btn-info btn-lg" data-toggle="modal" data-target="#id01" onclick= "getUname(getElementById('newUsername').id)">Login</button>
+		
+			<button  id ="createButton" type ="button" class ="btn btn-info btn-lg" data-toggle="modal" data-target="#id02" onclick= "getUname(getElementById('newUsername1').id)">Create Account</button>
+		</div>
 	</div>
+	</center>
+	<div id ="id01" class = "modal fade">
+		<div class = "modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Login</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+			<form>
+				<div class ="modal-body">
+						<div class="container">
+							<label><b>Email:</b></label><br>
+							<input  id = "newUsername"type="text" readonly><br>
+						</div>
+						<div class="container">
+							<label for="upass"><b>Password:</b></label><br>
+							<input type="password" placeholder="Enter Password" id="upass" required><br>
+						</div>
+				</div>
+				<div class="modal-footer">
+					<input type ="submit" class ="btn btn-default"value = "Login">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				 </div>
+			</form>
+		</div>
+	</div>
+
+
+	<div id="id02" class= "modal fade">
+		<div class= "modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Create Account</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+			<form>
+				<div class ="modal-body">
+						<div class="container">
+							<label><b>Email:</b></label><br>
+							<input  id = "newUsername1"type="text" readonly>
+							<br><label><b>Confirm Email:</b></label><br>
+							<input  id = "cNewUsername"type="text" required>
+						</div>
+						<div class="container">
+							<label ><b>Password:</b></label><br>
+							<input type="password" placeholder="Enter Password" name="upass" required>
+							<br><label ><b>Confirm Password:</b></label><br>
+							<input type="password" placeholder="Enter Password" name="cupass" required>
+						</div>
+				</div>
+				<div class="modal-footer">
+					<input type ="submit" class ="btn btn-default"value = "Login">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				 </div>
+			</form>
+		</div>
+	</div>
+	<script>
+
+		// Get the modal
+		
+
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+
+		function toggleHide(x){
+			var a = document.getElementById(x);
+			if(a.style.display == "none"){
+				a.style.display = "block"
+			}
+			else if(a.style.display == "block"){
+				a.style.display = "none"
+			}
+
+		}
+
+		function getUname(id){
+			console.log("here");
+			document.getElementById(id).value = document.getElementById('uname').value;
+		}
+	</script>
 </body>
 </html>
 
