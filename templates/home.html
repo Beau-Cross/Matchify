@@ -2,32 +2,68 @@
 <head>
         <title>Matchify</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+
+<style type = "text/css">
+	body { background: #242323 !important; }
+
+ 
+	.jumbotron-top {
+ 		padding: 6rem 1rem;
+		margin-bottom: 2rem;
+		background-size: cover;
+		background-image: url("http://www.baltana.com/files/wallpapers-5/Gradient-Background-Best-Wallpaper-16349.jpg");
+	}
 	
+	.jumbotron-custom-inner {
+		font-family: sans-serif !important; 
+		padding: 2rem;
+		width: 50%;
+		font-size: 100%;
+		margin: auto;
+		background-color: rgba(0,0,0,0.15);
+		color: rgba(255,255,255,1);
+		
+	}
+	
+
+	
+</style>
+
+<meta name ="viewport" content="width=device-width, initial-scale =1">	
 </head>
 <body>
-	<div class="container">
-		<div class="jumbotron text-center">
-			<h1>Matchify</h1>
-			<p><i>Love at first sound</i></p>
+
+		<div class="jumbotron-top text-center">
+			<div class="jumbotron-custom-inner ">
+				<div class ="display-3">
+					<p>MATCHIFY</p>
+					<h4>Some slogan here</h4>
+				</div>
+
+			</div>
 		</div>
-	</div>
+	
+
 	<div class="container">
+        	<form class="centered" action="login">
+                	<input class="btn btn-success form-control" type="submit" value="Login to Matchify">
 
-		<input class="btn btn-primary form-control" id="Login" type="button" value="Login">
-		<div style="margin-top:15px"></div>
-		<input class="btn btn-primary form-control" id="Create" type="button" value="Create an account">
-
-
-        	<!--<form class="centered" action="login">
-                	<input class="btn btn-primary form-control" type="submit" value="Login">
         	</form>
+
+		<br>
+		<form class="centered" action="/auth">
+                	<input class="btn btn-success form-control" type="submit" value="Login to Spotify">
+
+        	</form>
+
+
+
         	<br>
         	<form class="centered" action="createAccount">
-                	<input class="btn btn-primary form-control" type="submit" value="Create an account">
-        	</form>-->
-		
+                	<input class="btn btn-success form-control" type="submit" value="Create an account">
+        	</form>
+		<br><br><br><br><br>
 	</div>
-
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
 		function changeDisplay(id){
