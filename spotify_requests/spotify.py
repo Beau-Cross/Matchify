@@ -3,6 +3,10 @@ import base64
 import json
 import requests
 import sys
+import os
+
+here = os.path.dirname(os.path.abspath(__file__))
+filename = os.path.join(here, 'conf.json')
 
 # Workaround to support both python 2 & 3
 try:
@@ -38,7 +42,7 @@ SPOTIFY_AUTH_URL = SPOTIFY_AUTH_BASE_URL.format('authorize')
 SPOTIFY_TOKEN_URL = SPOTIFY_AUTH_BASE_URL.format('api/token')
 
 # client keys
-CLIENT = json.load(open('conf.json', 'r+'))
+CLIENT = json.load(open(filename, 'r+'))
 CLIENT_ID = CLIENT['id']
 CLIENT_SECRET = CLIENT['secret']
 

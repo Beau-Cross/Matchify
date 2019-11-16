@@ -2,7 +2,7 @@ from flask import Flask, redirect, g, render_template, request, session, jsonify
 from spotify_requests import spotify
 from os.path import abspath
 import ConfigParser
-
+import pyrebase
 
 
 
@@ -10,10 +10,16 @@ app = Flask(__name__)
 app.secret_key = 'key key its a key of keys'
 
 cfg = ConfigParser.ConfigParser()
-cfg.read("/home/vm_user/Desktop/Matchify/config.ini")
+cfg.read("/home/beauho/Programming/flaskappConfig/config.ini")
 
 config = {
-	#To do add config and change service account directory to yours
+	"apiKey": cfg.get('info','FIREBASE_API_KEY'),
+	"authDomain": "matchify-7b750.firebaseapp.com",
+  	"databaseURL": "https://matchify-7b750.firebaseio.com",
+  	"projectId": "matchify-7b750",
+  	"storageBucket": "matchify-7b750.appspot.com",
+  	"serviceAccount": "/home/beauho/Programming/flaskapp/firebase-private-key.json",
+  	"messagingSenderId": "367663586987"
 }
 
 firebase = pyrebase.initialize_app(config)
@@ -50,11 +56,6 @@ def template():
 
 
 
-
-
-
-
-
 #This page is how to pass key/value pairs to the server side
 @app.route("/validate")
 def validate():
@@ -67,49 +68,6 @@ def validate():
 def makejson():
 	d = {'car': {'color': 'red', 'make': 'Nissan', 'model': 'Altima'}}
 	return jsonify(d)
-
-#This page will be a general controller to the mysql database
-#In the future it will have the ability to authenticate accounts
-@app.route("/db")
-def dbController():
-	#Create generalized function based on query arguments
-	#Get all arguments
-	qString = request.query_string[0:]
-	delete = False
-	qKeys = ""
-	qKeysArr = []
-	for char in qString:
-		if (char == '='):
-			delete = True
-		if (char == '&'):
-			delete = False
-		if (delete == False):
-			qKeys += char
-
-	qKeysArr = qKeys.split("&")
-	qDict = {}
-	for key in qKeysArr:
-		qDict[key] = request.args.get(key)
-
-	returnJSON = False
-	action = "null"
-	if "action" in qDict:
-		if (qDict["action"] == "select"):
-			returnJSON = True
-			action = "select"
-		if (qDict["action"] == "proc"):
-			returnJSON = True
-			action = "proc"
-	if ("table" in qDict and qDict["table"].isalpha()):
-		table = qDict["table"]
-	if ("proc" in qDict and qDict["proc"].isaplpha()):
-		proc = qDict["proc"]
-
-	#Export data
-	if (returnJSON == True):
-		return jsonify(json_data)
-	else:
-		return null
 
 if __name__ == "__main__":
 	app.run(debug=True, port=spotify.PORT)
