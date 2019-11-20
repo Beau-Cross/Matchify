@@ -6,11 +6,11 @@ import pyrebase
 
 
 
-app = Flask(__name__)
+app = Flask(__name__,static_url_path='/static')
 app.secret_key = 'key key its a key of keys'
 
 cfg = ConfigParser.ConfigParser()
-cfg.read("/home/beauho/Programming/flaskappConfig/config.ini")
+cfg.read("/Users/teaganshepherd/Documents/Matchify/config.ini")
 
 config = {
 	"apiKey": cfg.get('info','FIREBASE_API_KEY'),
@@ -18,7 +18,7 @@ config = {
   	"databaseURL": "https://matchify-7b750.firebaseio.com",
   	"projectId": "matchify-7b750",
   	"storageBucket": "matchify-7b750.appspot.com",
-  	"serviceAccount": "/home/beauho/Programming/flaskapp/firebase-private-key.json",
+  	"serviceAccount": "/Users/teaganshepherd/Documents/Matchify/firebase-private-key.json",
   	"messagingSenderId": "367663586987"
 }
 
@@ -53,6 +53,27 @@ def template():
 	return render_template("home.html")
 #----------------END Home Calls
 
+
+#HeadCall
+#-----------------
+@app.route("/header")
+def nav():
+	return render_template("header.html")
+#-----------------
+
+#Account Info Call
+#-----------------
+@app.route("/accountInfo")
+def accountInfo():
+	return render_template("accountInfo.html")
+#-----------------
+
+#Matches
+#-----------------
+@app.route("/matches")
+def matches():
+	return render_template("matches.html")
+#-----------------
 
 @app.route("/firebaseTest")
 def fbTest():
