@@ -66,9 +66,24 @@ def nav():
 @app.route("/accountInfo")
 def accountInfo():
 	return render_template("accountInfo.html")
+
+class Matched(object):
+    name = ""
+    bio = ""
+    matchPercentage = 0.0
+
+    # The class "constructor" - It's actually an initializer 
+    def __init__(self, name, bio, perc):
+        self.name = name
+        self.bio = bio
+        self.matchPercentage = perc
+
+myMatches = []
 #-----------------
 
-#Matches
+#Matches (need to pass in items = )
+
+		#Which is an object that contains the matching info (Name,Bio,MatchPerc)
 #-----------------
 @app.route("/matches")
 def matches():
