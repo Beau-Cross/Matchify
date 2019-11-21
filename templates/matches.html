@@ -4,9 +4,9 @@
     <head>
         <title>Matchify</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-        <meta name ="viewport" content="width=device-width, initial-scale =1">	
+        <meta name ="viewport" content="width=device-width, initial-scale =1">
     </head>
-    
+
     <style type = "text/css">
         table {
             border-collapse: collapse;
@@ -18,13 +18,13 @@
             table-layout: fixed;
             width: 90%;
             height: 10%;
-            
+
         }
 
         th{
             text-align: center;
             vertical-align: middle;
-            font-size: 250%;
+            font-size: 150%;
         }
 
         td.name, td.bio{
@@ -47,20 +47,20 @@
     </style>
 
     <body>
-        <br><br><br><br><br><br><br>
+        <br><br><br>
         <table class= "one" align ="center" id="matches">
             <tr id = "0">
                 <th>Matches Name</th>
                 <th>Matches Bio</th>
                 <th>Matchify Score</th>
             </tr>
-            
+
             <tr id ="1">
                 <td class ="name">Beau</td>
                 <td class = "bio" >Cross</td>
                 <td class = "pic"><img src = "/static/images/matchify2100.png"></td>
             </tr>
-        
+
         </table>
 
         <script>

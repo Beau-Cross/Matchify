@@ -1,29 +1,29 @@
 from flask import Flask, redirect, g, render_template, request, session, jsonify, json
 from spotify_requests import spotify
 from os.path import abspath
-import ConfigParser
-import pyrebase
+#import ConfigParser
+#import pyrebase
 
 
 
 app = Flask(__name__,static_url_path='/static')
 app.secret_key = 'key key its a key of keys'
 
-cfg = ConfigParser.ConfigParser()
-cfg.read("/Users/teaganshepherd/Documents/Matchify/config.ini")
+#cfg = ConfigParser.ConfigParser()
+#cfg.read("/Users/teaganshepherd/Documents/Matchify/config.ini")
 
-config = {
-	"apiKey": cfg.get('info','FIREBASE_API_KEY'),
-	"authDomain": "matchify-7b750.firebaseapp.com",
-  	"databaseURL": "https://matchify-7b750.firebaseio.com",
-  	"projectId": "matchify-7b750",
-  	"storageBucket": "matchify-7b750.appspot.com",
-  	"serviceAccount": "/Users/teaganshepherd/Documents/Matchify/firebase-private-key.json",
-  	"messagingSenderId": "367663586987"
-}
+#config = {
+#	"apiKey": cfg.get('info','FIREBASE_API_KEY'),
+#	"authDomain": "matchify-7b750.firebaseapp.com",
+ # 	"databaseURL": "https://matchify-7b750.firebaseio.com",
+  #	"projectId": "matchify-7b750",
+  #	"storageBucket": "matchify-7b750.appspot.com",
+  #	"serviceAccount": "/Users/teaganshepherd/Documents/Matchify/firebase-private-key.json",
+  #	"messagingSenderId": "367663586987"
+#}
 
-firebase = pyrebase.initialize_app(config)
-db = firebase.database()
+#firebase = pyrebase.initialize_app(config)
+#db = firebase.database()
 
 #Authorization API Calls
 @app.route("/auth")
@@ -72,7 +72,7 @@ class Matched(object):
     bio = ""
     matchPercentage = 0.0
 
-    # The class "constructor" - It's actually an initializer 
+    # The class "constructor" - It's actually an initializer
     def __init__(self, name, bio, perc):
         self.name = name
         self.bio = bio
