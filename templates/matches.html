@@ -13,27 +13,30 @@
         }
 
         table, th, td {
-            border: 10px solid #FC3975;
+            border: 3px solid #FC3975;
             color: #1ED760;
             table-layout: fixed;
             width: 90%;
-            height: 240px
+            height: 10%;
             
         }
 
         th{
             text-align: center;
             vertical-align: middle;
-            font-size: 120px;
+            font-size: 250%;
         }
 
         td.name, td.bio{
-            font-size: 75px;
+            font-size: 180%;
             text-align: center;
             vertical-align: middle;
         }
         td.pic{
+            height: 10%;
             text-align: center;
+            object-fit:fill;
+
         }
         .center {
             display: block;
@@ -51,17 +54,17 @@
                 <th>Matches Bio</th>
                 <th>Matchify Score</th>
             </tr>
-            {% for item in items%}
+            
             <tr id ="1">
-                <td class ="name"></td>
-                <td class = "bio" ></td>
-                <td class = "pic"><img src = "/static/images/matchify100.png"></td>
+                <td class ="name">Beau</td>
+                <td class = "bio" >Cross</td>
+                <td class = "pic"><img src = "/static/images/matchify2100.png"></td>
             </tr>
-            {% endfor %}
+        
         </table>
 
         <script>
-            funtion getPic()
+            function getPic()
         </script>
     </body>
 
