@@ -1,0 +1,91 @@
+<!Doctype HTML>
+{% include "header.html" %}
+<html>
+<head>
+    <title>Matchify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<meta name ="viewport" content="width=device-width, initial-scale =1">
+</head>
+
+<style type = "text/css">
+	body {
+		background: #242323 !important;
+
+	 }
+
+   .submission {
+     background-color: #1ED760;
+     border: none;
+     color: white;
+   }
+
+	.jumbotron-top {
+ 		padding: 6rem 1rem;
+		margin-bottom: 2rem;
+		background-size: cover;
+		background-image: url("http://www.baltana.com/files/wallpapers-5/Gradient-Background-Best-Wallpaper-16349.jpg");
+	}
+
+	.jumbotron-custom-inner {
+		font-family: sans-serif !important;
+		padding: 2rem;
+		width: 50%;
+		font-size: 100%;
+		margin: auto;
+		background-color: rgba(0,0,0,0.15);
+		color: rgba(255,255,255,1);
+
+	}
+
+  .boxes {
+    border-color: white;
+    background-color: black;
+    color: #1ED760;
+    size: 100%;
+  }
+
+	h1 {
+		color: #1ED760;
+	}
+
+	.container{
+		height: 100%;
+		width: 100%;
+	}
+</style>
+<body>
+	<br><br><br><br>
+	<br><br><br><br>
+	<div class="container">
+    <form action="" method="post">
+      <label for="field1"><span><font color="#1ED760" size=100%>Name:* </font><span class="boxes"></span></span><input type="text" class="boxes" name="name" /></label>
+      <br>
+      <br>
+      <label for="field2"><span><font color="#1ED760" size=100%>Email:* </font><span class="boxes"></span></span><input type="text" class="boxes" name="email" /></label>
+      <br>
+      <br>
+      <label><span><font color="#1ED760" size=100%>Phone Number:* </font><span class="boxes"></span></span><input type="text" class="boxes" name="number" /></label>
+      <br>
+      <br>
+      <font color="#1ED760">Gender</font>
+      <br>
+      <input type="radio" name="gender" value="male"><font color="#1ED760">Male</font><br>
+      <input type="radio" name="gender" value="female" ><font color="#1ED760">Female</font><br>
+      <br>
+      <font color="#1ED760">Preference</font>
+      <br>
+      <input type="radio" name="preference" value="male"><font color="#1ED760">Male</font><br>
+      <input type="radio" name="preference" value="female" ><font color="#1ED760">Female</font><br>
+      <input type="radio" name="preference" value="both"> <font color="#1ED760">Both</font><br>
+      <br>
+      <input type="submit" class="btn btn-success form-control" value="Submit">
+  </form>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		function changeDisplay(id){
+
+		}
+	</script>
+</body>
+</html>

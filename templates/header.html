@@ -1,0 +1,109 @@
+<!Doctype HTML>
+<html>
+<style>
+body {
+    width: 100vw;
+    height: 30vh;
+    background: #242323 !important;
+    border-color: #1ED760;
+    border-bottom-style: solid;
+    }
+
+
+.myNavBar{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.topHalf{
+    width: 100%;
+    height: 66.6%;
+    position: relative;
+    z-index: 1;
+
+
+}
+.picture{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin-left: 33%;
+    margin-right: 0px;
+    margin-top: 0%;
+    padding:0;
+    background-image:url('/static/images/matchifyWord.png');
+    background-repeat: no-repeat;
+    padding-bottom: 100px;
+    top: -120px;
+}
+.offsetPic{
+   padding-top: 7vh;
+    width: 75%;
+    height: auto;
+}
+
+.bottomHalf{
+    width: 100%;
+    height: 33.3%;
+    position: relative;
+}
+
+.bottomHalf a {
+  float: left;
+  padding: 0px;
+  text-decoration: none;
+  font-size: 90%;
+  width: 33.33%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+  text-align: center; /* If you want the text to be centered */
+  padding-top: 10px;
+  padding-bottom: 10%;
+}
+
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.bar{
+    position:relative;
+    padding-top: 10px;
+
+}
+
+
+
+</style>
+<head>
+
+
+</head>
+
+<body>
+    <div class="myNavBar">
+        <div class ="topHalf">
+            <div class = "center">
+                <a href = "/home">
+                    <img class ="offsetPic" src="/static/images/matchifyWord2.png">
+                </a>
+            </div>
+        </div>
+
+        <div class = "bottomHalf">
+            <div class ="center">
+                <div class= "a">
+                    <div class = "bar">
+                            <a href="/home" style="color:#1ED760">Home</a>
+                            <a href='/matches' style='color:#1ED760'>Matches</a>
+                            <a href='/accountInfo' style='color:#1ED760'>Account Info</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

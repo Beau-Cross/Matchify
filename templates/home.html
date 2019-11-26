@@ -1,10 +1,17 @@
 <!Doctype HTML>
+{% include "header.html" %}
+<html>
 <head>
-        <title>Matchify</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <title>Matchify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<meta name ="viewport" content="width=device-width, initial-scale =1">	
+</head>
 
 <style type = "text/css">
-	body { background: #242323 !important; }
+	body { 
+		background: #242323 !important;
+		
+	 }
 
  
 	.jumbotron-top {
@@ -24,45 +31,40 @@
 		color: rgba(255,255,255,1);
 		
 	}
-	
 
 	
+	h1 {
+		color: #1ED760;
+		font-size: 500%;
+		text-shadow: 0 1px 0 #ccc,
+               0 2px 0 #c9c9c9,
+               0 3px 0 #bbb,
+               0 4px 0 #b9b9b9,
+               0 5px 0 #aaa,
+               0 6px 1px rgba(0,0,0,.1),
+               0 0 5px rgba(0,0,0,.1),
+               0 1px 3px rgba(0,0,0,.3),
+               0 3px 5px rgba(0,0,0,.2),
+               0 5px 10px rgba(0,0,0,.25),
+               0 10px 10px rgba(0,0,0,.2),
+               0 20px 20px rgba(0,0,0,.15);
+		
+	}
+
+	.container{
+		height: 100%;
+		width: 100%;
+	}
 </style>
-
-<meta name ="viewport" content="width=device-width, initial-scale =1">	
-</head>
 <body>
-
-		<div class="jumbotron-top text-center">
-			<div class="jumbotron-custom-inner ">
-				<div class ="display-3">
-					<p>MATCHIFY</p>
-					<h4>Some slogan here</h4>
-				</div>
-
-			</div>
-		</div>
-	
-
+	<br><br><br><br>
+	<h1 style="text-align:center">Love at first sound</h1>
+	<br><br><br><br>
 	<div class="container">
-        	<form class="centered" action="login">
-                	<input class="btn btn-success form-control" type="submit" value="Login to Matchify">
-
-        	</form>
-
-		<br>
+		
 		<form class="centered" action="/auth">
-                	<input class="btn btn-success form-control" type="submit" value="Login to Spotify">
-
-        	</form>
-
-
-
-        	<br>
-        	<form class="centered" action="createAccount">
-                	<input class="btn btn-success form-control" type="submit" value="Create an account">
-        	</form>
-		<br><br><br><br><br>
+            <input class="btn btn-success form-control" type="submit" value="Login to Spotify">
+        </form>
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>

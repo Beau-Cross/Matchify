@@ -2,29 +2,29 @@ from flask import Flask, redirect, url_for, g, render_template, request, session
 from spotify_requests import spotify
 from spotify_requests import spotify as sp
 from os.path import abspath
-import ConfigParser
-import pyrebase
+#import ConfigParser
+#import pyrebase
 
 
 
-app = Flask(__name__)
+app = Flask(__name__,static_url_path='/static')
 app.secret_key = 'key key its a key of keys'
 
-cfg = ConfigParser.ConfigParser()
-cfg.read("/home/beauho/Programming/flaskappConfig/config.ini")
+#cfg = ConfigParser.ConfigParser()
+#cfg.read("/Users/teaganshepherd/Documents/Matchify/config.ini")
 
-config = {
-	"apiKey": cfg.get('info','FIREBASE_API_KEY'),
-	"authDomain": "matchify-7b750.firebaseapp.com",
-  	"databaseURL": "https://matchify-7b750.firebaseio.com",
-  	"projectId": "matchify-7b750",
-  	"storageBucket": "matchify-7b750.appspot.com",
-  	"serviceAccount": "/home/beauho/Programming/flaskapp/firebase-private-key.json",
-  	"messagingSenderId": "367663586987"
-}
+#config = {
+#	"apiKey": cfg.get('info','FIREBASE_API_KEY'),
+#	"authDomain": "matchify-7b750.firebaseapp.com",
+ # 	"databaseURL": "https://matchify-7b750.firebaseio.com",
+  #	"projectId": "matchify-7b750",
+  #	"storageBucket": "matchify-7b750.appspot.com",
+  #	"serviceAccount": "/Users/teaganshepherd/Documents/Matchify/firebase-private-key.json",
+  #	"messagingSenderId": "367663586987"
+#}
 
-firebase = pyrebase.initialize_app(config)
-db = firebase.database()
+#firebase = pyrebase.initialize_app(config)
+#db = firebase.database()
 
 #Authorization API Calls
 @app.route("/auth")
@@ -169,6 +169,42 @@ def account():
 		return str(AccountInfo)
 
 #----------------End View
+
+#HeadCall
+#-----------------
+@app.route("/header")
+def nav():
+	return render_template("header.html")
+#-----------------
+
+#Account Info Call
+#-----------------
+@app.route("/accountInfo")
+def accountInfo():
+	return render_template("accountInfo.html")
+
+class Matched(object):
+    name = ""
+    bio = ""
+    matchPercentage = 0.0
+
+    # The class "constructor" - It's actually an initializer
+    def __init__(self, name, bio, perc):
+        self.name = name
+        self.bio = bio
+        self.matchPercentage = perc
+
+myMatches = []
+#-----------------
+
+#Matches (need to pass in items = )
+
+		#Which is an object that contains the matching info (Name,Bio,MatchPerc)
+#-----------------
+@app.route("/matches")
+def matches():
+	return render_template("matches.html")
+#-----------------
 
 @app.route("/firebaseTest")
 def fbTest():
