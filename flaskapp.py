@@ -2,29 +2,33 @@ from flask import Flask, redirect, url_for, g, render_template, request, session
 from spotify_requests import spotify
 from spotify_requests import spotify as sp
 from os.path import abspath
-#import ConfigParser
-#import pyrebase
+import ConfigParser
+import pyrebase
+import os
 
 
 
 app = Flask(__name__,static_url_path='/static')
 app.secret_key = 'key key its a key of keys'
 
-#cfg = ConfigParser.ConfigParser()
-#cfg.read("/Users/teaganshepherd/Documents/Matchify/config.ini")
+here = os.path.dirname(os.path.abspath(__file__))
+filename = os.path.join(here, 'config.ini')
+privatekeyPath = os.path.join(here, 'firebase-private-key.json')
+cfg = ConfigParser.ConfigParser()
+cfg.read(filename)
 
-#config = {
-#	"apiKey": cfg.get('info','FIREBASE_API_KEY'),
-#	"authDomain": "matchify-7b750.firebaseapp.com",
- # 	"databaseURL": "https://matchify-7b750.firebaseio.com",
-  #	"projectId": "matchify-7b750",
-  #	"storageBucket": "matchify-7b750.appspot.com",
-  #	"serviceAccount": "/Users/teaganshepherd/Documents/Matchify/firebase-private-key.json",
-  #	"messagingSenderId": "367663586987"
-#}
+config = {
+	"apiKey": cfg.get('info','FIREBASE_API_KEY'),
+	"authDomain": "matchify-7b750.firebaseapp.com",
+	"databaseURL": "https://matchify-7b750.firebaseio.com",
+	"projectId": "matchify-7b750",
+	"storageBucket": "matchify-7b750.appspot.com",
+	"serviceAccount": privatekeyPath,
+	"messagingSenderId": "367663586987"
+}
 
-#firebase = pyrebase.initialize_app(config)
-#db = firebase.database()
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
 
 #Authorization API Calls
 @app.route("/auth")
