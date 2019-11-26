@@ -1,5 +1,6 @@
-from flask import Flask, redirect, g, render_template, request, session, jsonify, json
+from flask import Flask, redirect, url_for, g, render_template, request, session, jsonify, json
 from spotify_requests import spotify
+from spotify_requests import spotify as sp
 from os.path import abspath
 import ConfigParser
 import pyrebase
@@ -36,12 +37,25 @@ def callback():
 	auth_header = spotify.authorize(auth_token)
 	session['auth_header'] = auth_header
 
-	return profile()
+	return redirect(url_for('home'))
+	#return profile()
 
 def valid_toek(resp):
 	return resp is not None and not 'error' in resp
+
+#@app.route("/logout")
+#def logout():
+
 #----------------END Authorizaton
 
+
+#Spotify Helper functions
+
+def getUserId():
+	profileJSON = spotify.get_users_profile(session['auth_header'])
+	return profileJSON["id"]
+
+#----------------END Helper
 
 #Home Page Calls
 @app.route("/")
@@ -53,12 +67,113 @@ def template():
 	return render_template("home.html")
 #----------------END Home Calls
 
+#Account Synchronization
+
+@app.route("/topArtists")
+def topArtists(artists=None,tracks=None, profile=None):
+	if (session['auth_header'] == None):
+		return redirect(url_for('auth'))
+	#Grab account info
+	profileJSON = spotify.get_users_profile(session['auth_header'])
+	#Grab account data
+	artists = spotify.get_users_top(session['auth_header'],'artists')
+
+	if (artists is None):
+		return str("Sorry, this account has no listening information and cannot be used. Listen to some music on Spotify before using.")
+
+	if (profileJSON != None):
+		return render_template('data.html', artists=artists["items"], profile=profileJSON)
+	else:
+		return redirect(url_for('home'))
+
+@app.route("/topTracks")
+def topTracks():
+	if (session['auth_header'] == None):
+		return redirect(url_for('auth'))
+	#Grab account info
+	profileJSON = spotify.get_users_profile(session['auth_header'])
+	#Grab account data
+	tracks = spotify.get_users_top(session['auth_header'], 'tracks')
+	return str(tracks)
+
+@app.route("/updateAccountData")
+def updateAccountData():
+	if (session['auth_header'] == None):
+		return redirect(url_for('auth'))
+	#Get data
+	profileJSON = spotify.get_users_profile(session['auth_header'])
+	tracks = spotify.get_users_top(session['auth_header'], 'tracks')
+	artists = spotify.get_users_top(session['auth_header'], 'artists')
+
+	profileID = profileJSON["id"]
+
+	db.child("matchData").child(profileID).child("artists").set(artists)
+	db.child("matchData").child(profileID).child("tracks").set(tracks)
+
+	return str("For account: "+profileID+" tracks:"+str(tracks)+" artists:"+str(artists))
+
+
+@app.route("/updateAccountInfo", methods=['POST', 'GET'])
+def updateAccountInfo(accountUpdated=None, AccountInfo=None):
+	if (session['auth_header'] == None):
+		return redirect(url_for('auth'))
+	accountUpdated = False
+	profileJSON = spotify.get_users_profile(session['auth_header'])
+	profileID = profileJSON["id"]
+	AccountInfo = {}
+	#If the form submitted
+	if (request.method == 'POST'):
+		#Fill Account Info
+		AccountInfo["name"] = request.form.get("name")
+		AccountInfo["email"] = request.form.get("email")
+		AccountInfo["phone"] = request.form.get("number")
+		AccountInfo["gender"] = request.form.get("gender")
+		AccountInfo["preference"] = request.form.get("preference")
+		#Update Info in database
+		db.child("users").child(profileID).set(AccountInfo)
+		accountUpdated = True
+	else:
+		#Get Account Info
+		QueryList = db.child("users").child(profileID).get()
+		AccountInfo = QueryList[0]
+		if (AccountInfo == None):
+			AccountInfo = {}
+	return render_template("accountInfo.html", accountUpdated=accountUpdated, AccountInfo=AccountInfo)
+
+@app.route("/updateAccountMatch")
+def updateAccountMatch():
+	if (session['auth_header'] == None):
+		return redirect(url_for('auth'))
+
+@app.route("/getAccountData")
+def getAccountData():
+	if (session['auth_header'] == None):
+		return redirect(url_for('auth'))
+
+#----------------END Account Sync
+
+#View Other Accounts
+
+@app.route("/account")
+def account():
+	#Get query key value pair for userID
+	profileID = request.args.get("id")
+	if (profileID == None):
+		return str("Profile ID Required")
+	#Grab account info
+	QueryList = db.child("users").child(profileID).get()
+	AccountInfo = QueryList.val()
+	if (AccountInfo == None):
+		return str("This account doesn't exist in our database")
+	else:
+		return str(AccountInfo)
+
+#----------------End View
 
 @app.route("/firebaseTest")
 def fbTest():
 	new_event = {"Test": "Value"}
-	jsonData = json.dumps(new_event)
-	db.child("events").push(jsonData)
+	db.child("events").child("0").set(new_event)
 	return str(new_event)
 
 #This page is how to pass key/value pairs to the server side

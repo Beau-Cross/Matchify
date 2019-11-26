@@ -49,9 +49,9 @@ CLIENT_SECRET = CLIENT['secret']
 # server side parameter
 # * fell free to change it if you want to, but make sure to change in
 # your spotify dev account as well *
-CLIENT_SIDE_URL = "http://127.0.0.1"
-PORT = 5000
-REDIRECT_URI = "{}:{}/home".format(CLIENT_SIDE_URL, PORT)
+CLIENT_SIDE_URL = "http://70.178.31.175"
+PORT = 8080
+REDIRECT_URI = "{}:{}/callback".format(CLIENT_SIDE_URL, PORT)
 SCOPE = "playlist-modify-public playlist-modify-private user-read-recently-played user-top-read"
 STATE = ""
 SHOW_DIALOG_bool = True
@@ -203,7 +203,7 @@ def get_users_top(auth_header, t):
         return None
     url = "{}/{type}".format(USER_TOP_ARTISTS_AND_TRACKS_ENDPOINT, type=t)
     resp = requests.get(url, headers=auth_header)
-    print(resp)
+    return resp.json()
 
 # https://developer.spotify.com/web-api/web-api-personalization-endpoints/get-recently-played/
 def get_users_recently_played(auth_header):
