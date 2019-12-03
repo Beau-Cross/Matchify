@@ -4,68 +4,53 @@
     <head>
         <title>Matchify</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <meta name ="viewport" content="width=device-width, initial-scale =1">
     </head>
-
-    <style type = "text/css">
-        table {
-            border-collapse: collapse;
-        }
-
-        table, th, td {
-            border: 3px solid #FC3975;
-            color: #1ED760;
-            table-layout: fixed;
-            width: 90%;
-            height: 10%;
-
-        }
-
-        th{
-            text-align: center;
-            vertical-align: middle;
-            font-size: 150%;
-        }
-
-        td.name, td.bio{
-            font-size: 180%;
-            text-align: center;
-            vertical-align: middle;
-        }
-        td.pic{
-            height: 10%;
-            text-align: center;
-            object-fit:fill;
-
-        }
-        .center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 50%;
-        }
     </style>
 
     <body>
-        <br><br><br>
-        <table class= "one" align ="center" id="matches">
-            <tr id = "0">
-                <th>Matches Name</th>
-                <th>Matches Bio</th>
-                <th>Matchify Score</th>
-            </tr>
+      <div style="padding-top:15px;"></div>
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <form class="centered" action="/updateMatches">
+              <input id="refresh" onclick="refreshPage()" class="btn btn-success form-control" type="button" value="Refresh Matches">
+              <div id="loader" class="loader" style="display:none;margin-left:auto;margin-right:auto;"></div>
+          </form>
+        </div>
+      </div>
+      <div style="padding-top:15px;"></div>
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <table class="table table-dark" style="text-align:center" align="center" id="matches">
+              <tr id = "0">
+                  <th>Photo</th>
+                  <th>Name</th>
+                  <th>Matchify Score</th>
+                  <th>More Information</th>
+              </tr>
 
-            <tr id ="1">
-                <td class ="name">Beau</td>
-                <td class = "bio" >Cross</td>
-                <td class = "pic"><img src = "/static/images/matchify2100.png"></td>
-            </tr>
+              <tr id ="1">
+                  <td>Photo</td>
+                  <td>Beau Cross</td>
+                  <td><img src="/static/images/matchify2100.png" width=32px></td>
+                  <td><a href="/account?id=" class="expandAcc" style="padding:15px;"><img src="/static/img/more.png" width=32px></td></a>
+              </tr>
 
-        </table>
-
-        <script>
-            function getPic()
-        </script>
+          </table>
+        </div>
+      </div>
+      <div style="padding-top:15px;"></div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script>
+        function refreshPage(){
+          document.getElementById("refresh").style.display = "none";
+          document.getElementById("loader").style.display = "block";
+          window.location = "/updateMatches";
+        }
+      </script>
     </body>
 
 </html>

@@ -4,74 +4,67 @@
 <head>
     <title>Matchify</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-	<meta name ="viewport" content="width=device-width, initial-scale =1">	
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+	<meta name ="viewport" content="width=device-width, initial-scale =1">
 </head>
-
-<style type = "text/css">
-	body { 
-		background: #242323 !important;
-		
-	 }
-
- 
-	.jumbotron-top {
- 		padding: 6rem 1rem;
-		margin-bottom: 2rem;
-		background-size: cover;
-		background-image: url("http://www.baltana.com/files/wallpapers-5/Gradient-Background-Best-Wallpaper-16349.jpg");
-	}
-	
-	.jumbotron-custom-inner {
-		font-family: sans-serif !important; 
-		padding: 2rem;
-		width: 50%;
-		font-size: 100%;
-		margin: auto;
-		background-color: rgba(0,0,0,0.15);
-		color: rgba(255,255,255,1);
-		
-	}
-
-	
-	h1 {
-		color: #1ED760;
-		font-size: 500%;
-		text-shadow: 0 1px 0 #ccc,
-               0 2px 0 #c9c9c9,
-               0 3px 0 #bbb,
-               0 4px 0 #b9b9b9,
-               0 5px 0 #aaa,
-               0 6px 1px rgba(0,0,0,.1),
-               0 0 5px rgba(0,0,0,.1),
-               0 1px 3px rgba(0,0,0,.3),
-               0 3px 5px rgba(0,0,0,.2),
-               0 5px 10px rgba(0,0,0,.25),
-               0 10px 10px rgba(0,0,0,.2),
-               0 20px 20px rgba(0,0,0,.15);
-		
-	}
-
-	.container{
-		height: 100%;
-		width: 100%;
-	}
-</style>
 <body>
-	<br><br><br><br>
-	<h1 style="text-align:center">Love at first sound</h1>
-	<br><br><br><br>
-	<div class="container">
-		
-		<form class="centered" action="/auth">
-            <input class="btn btn-success form-control" type="submit" value="Login to Spotify">
-        </form>
-	</div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div style="text-align:center;margin-top:15px;">
+        <h1 style="color:#1ED760">Your Top Tracks:</h1>
+      </div>
+      <table class="table table-dark" style="background-color:transparent;text-align:center">
+        <thread>
+          <tr>
+            <th>Rank</th>
+            <th>Art</th>
+            <th>Track</th>
+            <th>Artist(s)</th>
+            <th>Populatrity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for track in tracks %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td><img src='{{track.album.images[0].url}}' width=64px></td>
+            <td>{{track.name}}</td>
+            <td>{% for artist in track.artists %}{% if loop.index != 1 %}, {% endif %}{{artist.name}}{% endfor %}</td>
+            <td>{{track.popularity}}</td>
+          </tr>
+        	{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-xl-6">
+      <div style="text-align:center;margin-top:15px;">
+        <h1 style="color:#1ED760">Your Top Artists:</h1>
+      </div>
+      <table class="table table-dark" style="background-color:transparent;text-align:center">
+        <thread>
+          <tr>
+            <th>Rank</th>
+            <th>Art</th>
+            <th>Artist</th>
+            <th>Genre(s)</th>
+            <th>Populatrity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for artist in artists %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td><img src='{{artist.images[0].url}}' width=64px></td>
+            <td>{{artist.name}}</td>
+            <td>{% for genre in artist.genres%}{% if loop.index != 1 %}, {% endif %}{{genre}}{% endfor %}</td>
+            <td>{{artist.popularity}}</td>
+          </tr>
+        	{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div style="padding-top:15px;"></div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script>
-		function changeDisplay(id){
-			
-		}
-	</script>
 </body>
 </html>
-

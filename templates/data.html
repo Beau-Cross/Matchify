@@ -2,7 +2,8 @@
 <head>
         <title>Matchify</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-	<meta name ="viewport" content="width=device-width, initial-scale =1">	
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+	<meta name ="viewport" content="width=device-width, initial-scale =1">
 </head>
 <body>
 	{% for artist in artists %}
@@ -13,11 +14,5 @@
 
 	<p>{{profile}}</p>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script>
-		function changeDisplay(id){
-			
-		}
-	</script>
 </body>
 </html>
-

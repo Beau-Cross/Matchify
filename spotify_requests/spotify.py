@@ -71,7 +71,7 @@ auth_query_parameters = {
 if sys.version_info[0] >= 3:
     URL_ARGS = "&".join(["{}={}".format(key, urllibparse.quote(val))
                     for key, val in list(auth_query_parameters.items())])
-else: 
+else:
     URL_ARGS = "&".join(["{}={}".format(key, urllibparse.quote(val))
                     for key, val in auth_query_parameters.iteritems()])
 
@@ -94,12 +94,12 @@ def authorize(auth_token):
         "code": str(auth_token),
         "redirect_uri": REDIRECT_URI
     }
-    
+
     #python 3 or above
     if sys.version_info[0] >= 3:
         base64encoded = base64.b64encode(("{}:{}".format(CLIENT_ID, CLIENT_SECRET)).encode())
         headers = {"Authorization": "Basic {}".format(base64encoded.decode())}
-    else: 
+    else:
         base64encoded = base64.b64encode("{}:{}".format(CLIENT_ID, CLIENT_SECRET))
         headers = {"Authorization": "Basic {}".format(base64encoded)}
 

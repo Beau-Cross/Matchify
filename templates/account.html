@@ -1,0 +1,128 @@
+<!Doctype HTML>
+{% include "header.html" %}
+<html>
+<head>
+    <title>Matchify</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+	<meta name ="viewport" content="width=device-width, initial-scale =1">
+</head>
+
+<style type = "text/css">
+	body {
+		background: #242323 !important;
+
+	 }
+
+   .submission {
+     background-color: #1ED760;
+     border: none;
+     color: white;
+   }
+
+	.jumbotron-top {
+ 		padding: 6rem 1rem;
+		margin-bottom: 2rem;
+		background-size: cover;
+		background-image: url("http://www.baltana.com/files/wallpapers-5/Gradient-Background-Best-Wallpaper-16349.jpg");
+	}
+
+	.jumbotron-custom-inner {
+		font-family: sans-serif !important;
+		padding: 2rem;
+		width: 50%;
+		font-size: 100%;
+		margin: auto;
+		background-color: rgba(0,0,0,0.15);
+		color: rgba(255,255,255,1);
+
+	}
+
+  .boxes {
+    border-color: white;
+    background-color: black;
+    color: #1ED760;
+    size: 100%;
+  }
+
+	h1 {
+		color: #1ED760;
+	}
+
+	.container{
+		height: 100%;
+		width: 100%;
+	}
+</style>
+<body>
+  <div class="whiteText">
+  <div style="padding-top:15px;"></div>
+  {% if Matched == 0 %}
+  <div class="row" style="padding:5px">
+  <div class="col-md-3"></div>
+  <div class="col-md-6" style="text-align:center;padding:15px;background-color:#343a40;color:#1ED760;font-size:36px;">
+        Would you like to match with {{AccountInfo.name}}?
+	<br>
+	<a class="expandAcc" href="/match?id={{AccountID}}" style="text-align:center;width:25%;display: inline-block;"><img src="https://img.icons8.com/color/48/000000/checked--v2.png"></a>
+	<a class="expandAcc" href="/matches" style="text-align:center;width:25%;display: inline-block;"><img src="https://img.icons8.com/color/48/000000/cancel-2--v2.png"></a>
+  </div>
+  </div>
+  {% endif %}
+  <div style="padding-top:15px;"></div>
+  <div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-6">
+      <label for="field1">
+          <font color="#1ED760" size=100%>Name:</font>
+      </label>
+      <br> 
+      {{AccountInfo.name}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <label for="field1">
+          <font color="#1ED760" size=100%>Matchify Score:</font>
+      </label>
+      <br>
+      34521
+    </div>
+  </div>
+  {% if Matched == 2 %}
+  <!--This will be if they are both matched-->
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <label for="field1">
+          <font color="#1ED760" size=100%>Phone #:</font>
+      </label>
+      <br>
+      {{AccountInfo.phone}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <label for="field1">
+          <font color="#1ED760" size=100%>Email:</font>
+      </label>
+      <br>
+      {{AccountInfo.email}}
+    </div>
+  </div>
+  {% endif %}
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <label for="field1">
+          <font color="#1ED760" size=100%>Bio:</font>
+      </label>
+      <br>
+      <textarea style="height:250px;font-size:28px;background-color:transparent;color:#fff;border:0;padding:0;margin:0;" readonly>{{AccountInfo.bio}}</textarea></div>
+  </div>
+  <div style="padding-top:15px;"></div>
+  </div>
+</body>
+</html>
