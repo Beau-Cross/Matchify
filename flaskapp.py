@@ -219,8 +219,22 @@ def account(AccountInfo=None, Matched=None, AccountID=None):
 		#1 is matched with them but they haven't matched you --> don't show contact info/don't show match option
 		#2 is both people are matched --> show contact info/don't show match option
 	#Grab match data
-	#yourMatches = db.child("matchedWith").child(profileJSON["id"]).get().val()
-	#theirMatches = db.child("matchedWith").child(profileID).get().val()
+	yourMatches = db.child("matchedWith").child(profileJSON["id"]).get().val()
+	theirMatches = db.child("matchedWith").child(profileID).get().val()
+
+	if (yourMatches is None):
+		yourMatches = {}
+	if (theirMatches is None):
+		theirMatches = {}
+
+	for yourMatch in yourMatches:
+		if (yourMatch == profileID):
+			Match = 1
+
+	if (Match == 1):
+		for theirMatch in theirMatches:
+			if (theirMatch == profileJSON["id"]):
+				Match = 2
 
 	#Grab account info
 	QueryList = db.child("users").child(profileID).get()
@@ -275,13 +289,27 @@ def accountInfo():
 	return render_template("accountInfo.html")
 
 @app.route("/matches")
-def matches():
+def matches(yourMatches=None):
 	if ('auth_header' in session):
 		profileJSON = spotify.get_users_profile(session['auth_header'])
 		if ("id" not in profileJSON):
 			return render_template("homeAnon.html")
 		else:
-			return render_template("matches.html")
+			profileID = profileJSON["id"]
+			yourMatches = db.child("matchResults").child(profileID).get().val()
+			if (yourMatches is None):
+				return redirect("/updateMatches")
+			topMatches = []
+			for key, value in yourMatches.iteritems():
+				if (len(topMatches) == 0):
+					topMatches.append(yourMatches[key])
+				else:
+					idx = 0
+					while (idx < len(topMatches) and int(yourMatches[key]["score"]) < int(topMatches[idx]["score"])):
+						idx += 1
+					yourMatches[key]["id"] = key
+					topMatches.insert(idx, yourMatches[key])
+			return render_template("matches.html", yourMatches=topMatches)
 	else:
 		return render_template("homeAnon.html")
 
@@ -294,7 +322,60 @@ def updateMatches():
 			else:
 				#update matches
 				#run matching algorithm
-
+				profileMatchData = {}
+				usersData = db.child("matchData").get().val()
+				usersPersonalData = db.child("users").get().val()
+				personalData = usersData[profileJSON["id"]]
+				yourSex = usersPersonalData[profileJSON["id"]]["gender"]
+				yourPref = usersPersonalData[profileJSON["id"]]["preference"]
+				possibleSex = []
+				if (yourPref == "both"):
+					possibleSex = ['male', 'female']
+				else:
+					possibleSex = [yourPref]
+				amount = 0
+				for key, userData in usersData.iteritems(): #For every user
+					score = 0
+					if (key in usersPersonalData):
+						theirSex = usersPersonalData[key]["gender"]
+						theirPref = usersPersonalData[key]["preference"]
+						theirPoss = []
+						if (theirPref == "both"):
+							theirPoss = ['male', 'female']
+						else:
+							theirPoss = [theirPref]
+						#If the account isn't your own
+						if (key != profileJSON["id"] and yourSex in theirPoss and theirSex in possibleSex):
+							#Compare all songs
+							if 'tracks' in usersData[key] and 'tracks' in personalData and usersData[key]["tracks"] is not None and personalData["tracks"] is not None and 'items' in usersData[key]["tracks"] and 'items' in personalData["tracks"]:
+								for trackO in usersData[key]["tracks"]["items"]:
+									for trackM in personalData["tracks"]["items"]:
+										amount += 1
+										#return str(trackM["name"].decode('utf-8'))+str(trackO["name"].decode('utf-8'))
+										if (type(trackM["name"]) == type(trackO["name"]) and trackM["name"] == trackO["name"]):
+										#if (usersData[userData]["tracks"]["items"][trackO]["name"] == personalData["tracks"]["items"][trackM]["name"]):
+											score += 1
+							#Compare all artists
+							if 'artists' in usersData[key] and 'artists' in personalData and usersData[key]["artists"] is not None and personalData["artists"] is not None and 'items' in usersData[key]["artists"] and 'items' in personalData["artists"]:
+								for artistO in usersData[key]["artists"]["items"]:
+									for artistM in personalData["artists"]["items"]:
+										amount += 1
+										#return str(str(artistM["name"])+" "+str(artistO["name"]))
+										if (type(artistM["name"]) == type(artistO["name"]) and artistM["name"] == artistO["name"]):
+										#if (usersData[userData]["artists"]["items"][artistO]["name"] == personalData["artists"]["items"][artistM]["name"]):
+											score += 1
+										if 'genre' in artistM and 'genre' in artistO:
+											for genreM in artistM["genre"]:
+												for genreO in artistO["genre"]:
+											#for genreM in personalData["artists"]["items"][artistM]["genre"]:
+												#for genreO in usersData[userData]["artists"]["items"][artistO]["genre"]:
+													if (type(genreM) == type(genreO) and genreM == genreO):	
+														score += 1
+							#Give score to user
+							#return "key = "+str(key)+" score = "+str(score)
+							profileMatchData[key] = {'score':score, 'name':str(usersPersonalData[key]["name"])}
+				#update the database
+				db.child("matchResults").child(profileJSON["id"]).set(profileMatchData)
 				return redirect("/matches")
 		else:
 			return render_template("homeAnon.html")
