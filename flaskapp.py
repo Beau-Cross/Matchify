@@ -202,7 +202,7 @@ def getAccountData():
 #View Other Accounts
 
 @app.route("/account")
-def account(AccountInfo=None, Matched=None, AccountID=None):
+def account(AccountInfo=None, Matched=None, AccountID=None,dataMatch=None):
 	Match = 0
 	if ('auth_header' not in session):
 		return redirect("/")
@@ -221,6 +221,7 @@ def account(AccountInfo=None, Matched=None, AccountID=None):
 	#Grab match data
 	yourMatches = db.child("matchedWith").child(profileJSON["id"]).get().val()
 	theirMatches = db.child("matchedWith").child(profileID).get().val()
+	dataMatch = db.child("matchResults").child(profileJSON["id"]).get().val()
 
 	if (yourMatches is None):
 		yourMatches = {}
@@ -242,7 +243,7 @@ def account(AccountInfo=None, Matched=None, AccountID=None):
 	if (AccountInfo == None):
 		return str("This account doesn't exist in our database")
 	else:
-		return render_template("account.html", AccountInfo=AccountInfo, Matched=Match, AccountID=profileID)
+		return render_template("account.html", AccountInfo=AccountInfo, Matched=Match, AccountID=profileID,dataMatch=dataMatch[profileID])
 
 @app.route("/match")
 def match():
