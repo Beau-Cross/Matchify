@@ -5,7 +5,7 @@ from os.path import abspath
 import ConfigParser
 import pyrebase
 import os
-
+from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__,static_url_path='/static')
@@ -16,6 +16,11 @@ filename = os.path.join(here, 'config.ini')
 privatekeyPath = os.path.join(here, 'firebase-private-key.json')
 cfg = ConfigParser.ConfigParser()
 cfg.read(filename)
+
+PFP_FOLDER = os.path.join(here, '/static/images/pfp')
+ALLOWED_EXTENSIONS = set(['txt','pdf','png','jpg','jpeg','gif'])
+
+app.config['PFP_FOLDER'] = PFP_FOLDER
 
 config = {
 	"apiKey": cfg.get('info','FIREBASE_API_KEY'),
@@ -29,6 +34,24 @@ config = {
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
+
+#Profile Pic
+def allowed_file(filename):
+	return '.' in filename and \
+		filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def upload_file():
+	if request.method == 'POST':
+		if 'file' not in request.files:
+			flash('No file part')
+			return redirect(request.url)
+		file = request.files['file']
+		if file.filename == '':
+			flash('No selected file')
+			return redirect(request.url)
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['PFP_FOLDER'], spotify.get_uesrs_profile(session['auth_header'])["id"]))
 
 #Authorization API Calls
 @app.route("/auth")
@@ -337,6 +360,7 @@ def updateMatches():
 				amount = 0
 				for key, userData in usersData.iteritems(): #For every user
 					score = 0
+					words = []
 					if (key in usersPersonalData):
 						theirSex = usersPersonalData[key]["gender"]
 						theirPref = usersPersonalData[key]["preference"]
@@ -351,30 +375,32 @@ def updateMatches():
 							if 'tracks' in usersData[key] and 'tracks' in personalData and usersData[key]["tracks"] is not None and personalData["tracks"] is not None and 'items' in usersData[key]["tracks"] and 'items' in personalData["tracks"]:
 								for trackO in usersData[key]["tracks"]["items"]:
 									for trackM in personalData["tracks"]["items"]:
-										amount += 1
-										#return str(trackM["name"].decode('utf-8'))+str(trackO["name"].decode('utf-8'))
 										if (type(trackM["name"]) == type(trackO["name"]) and trackM["name"] == trackO["name"]):
-										#if (usersData[userData]["tracks"]["items"][trackO]["name"] == personalData["tracks"]["items"][trackM]["name"]):
-											score += 1
+											score += 5
+											words.append(trackM["name"])
 							#Compare all artists
 							if 'artists' in usersData[key] and 'artists' in personalData and usersData[key]["artists"] is not None and personalData["artists"] is not None and 'items' in usersData[key]["artists"] and 'items' in personalData["artists"]:
 								for artistO in usersData[key]["artists"]["items"]:
 									for artistM in personalData["artists"]["items"]:
-										amount += 1
-										#return str(str(artistM["name"])+" "+str(artistO["name"]))
+										#compare artist names
 										if (type(artistM["name"]) == type(artistO["name"]) and artistM["name"] == artistO["name"]):
-										#if (usersData[userData]["artists"]["items"][artistO]["name"] == personalData["artists"]["items"][artistM]["name"]):
-											score += 1
-										if 'genre' in artistM and 'genre' in artistO:
-											for genreM in artistM["genre"]:
-												for genreO in artistO["genre"]:
-											#for genreM in personalData["artists"]["items"][artistM]["genre"]:
-												#for genreO in usersData[userData]["artists"]["items"][artistO]["genre"]:
-													if (type(genreM) == type(genreO) and genreM == genreO):	
+											score += 25
+											words.append(artistM["name"])
+										#compare artist genres
+										if 'genres' in artistM and 'genres' in artistO:
+											for genreM in artistM["genres"]:
+												for genreO in artistO["genres"]:
+													if (type(genreM) == type(genreO) and genreM == genreO):
 														score += 1
+														words.append(genreM)
 							#Give score to user
 							#return "key = "+str(key)+" score = "+str(score)
-							profileMatchData[key] = {'score':score, 'name':str(usersPersonalData[key]["name"])}
+							unique = []
+							for i in words:
+								if i not in unique:
+									unique.append(i)
+							keywords = ', '.join(unique)
+							profileMatchData[key] = {'score':score, 'name':str(usersPersonalData[key]["name"]), 'keywords':keywords}
 				#update the database
 				db.child("matchResults").child(profileJSON["id"]).set(profileMatchData)
 				return redirect("/matches")

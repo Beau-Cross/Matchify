@@ -80,7 +80,7 @@
     </div>
     <div class="col-lg-3">
         <label for="field1">
-          <span><font color="#1ED760" size=100%>Name:</font><span class="boxes"></span></span><input required value="{{AccountInfo.name}}" type="text" class="boxes form-control" name="name" />
+          <span><font color="#1ED760" size=100%>Name:</font><span class="boxes"></span></span><input required value="{{AccountInfo.name}}" onkeyup="valid(this)" onblur="valid(this)"  type="text" class="boxes form-control" name="name" />
         </label>
     </div>
     <div class="col-lg-3">
@@ -142,7 +142,7 @@
       <label>
       <font color="#1ED760" size=100%>About Me:</font>
       </label>
-      <textarea type="text" name="bio" class="form-control" required>{{AccountInfo.bio}}</textarea>
+      <textarea type="text" maxlength="300" name="bio" class="form-control" required>{{AccountInfo.bio}}</textarea>
     </div>
   </div>
   </form>
@@ -154,6 +154,11 @@
       document.getElementById("refresh").style.display = "none";
       document.getElementById("loader").style.display = "block";
       window.location = "/updateAccountData";
+    }
+  </script>
+  <script>
+    function valid(f) {
+    !(/^[A-z&#209;&#241;&nbsp;0-9; ;]*$/i).test(f.value)?f.value = f.value.replace(/[^A-z&#209;&#241;&nbsp;0-9; ;]/ig,''):null;
     }
   </script>
 </body>

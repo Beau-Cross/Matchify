@@ -26,7 +26,6 @@
         <div class="col-md-6">
           <table class="table table-dark" style="text-align:center" align="center" id="matches">
               <tr id = "0">
-                  <th>Photo</th>
                   <th>Name</th>
                   <th>Matchify Score</th>
                   <th>More Information</th>
@@ -40,9 +39,8 @@
 	      {% for match in yourMatches %}
 	      {% if match.score > 0 %}
 	      <tr id ="1">
-                  <td>Photo</td>
                   <td>{{match.name}}</td>
-                  <td><div style=""><img style="height:{% if (match.score/6*32) > 32 %}32{% else %}{{match.score /6 * 32}}{% endif %}px;object-fit:cover;object-position:bottom;" src="/static/images/matchify2100.png" width=32px></div></td>
+                  <td>{{match.score}}<div style=""><img style="height:{% if (match.score/300*32) > 32 %}32{% else %}{{match.score /300 * 32}}{% endif %}px;object-fit:cover;object-position:bottom;" src="/static/images/matchify2100.png" width=32px></div></td>
                   <td><a href="/account?id={{match.id}}" class="expandAcc" style="padding:15px;"><img src="/static/img/more.png" width=32px></td></a>
               </tr>
 	      {% endif %}
